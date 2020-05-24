@@ -7,31 +7,11 @@ const client = new pg.Client(conString);
 // var tem = 33;
 //sql语句
 selectSQLString = `SELECT DISTINCT "provinceName",  "province_confirmedCount", "province_suspectedCount","province_curedCount","province_deadCount" FROM "DXYArea" WHERE "countryName" = '中国' AND "updateTime" LIKE '2020-01-25%'`;
-//客户端连接，进行数据插入
-// client.connect(function (error, results) {
-//   if (error) {
-//     console.log('clientConnectionReady Error:' + error.message);
-//     client.end();
-//     return;
-//   }
-//   console.log('数据库连接成功...\n');
 
-//   // client.query(selectSQLString, function (error, results) {
-//   //   console.log(error);
-//   //   console.log(results);
-//   // })
-
-//   // 每10分钟发一次心跳查询，防止连接断开
-//   setInterval(() => {
-//     client.query(`SELECT * FROM "DXYArea" LIMIT 1 OFFSET 0`, function (error, results) {
-//       console.log(error);
-//       console.log(results);
-//     })
-//   }, 10 * 60 * 1000);
-// });
 
 module.exports = sql => {
   return new Promise((resolve, reject) => {
+    const client = new pg.Client(conString);
     client.connect(function (error, results) {
       if (error) {
         client.end();

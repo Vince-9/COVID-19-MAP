@@ -15,8 +15,9 @@ console.log(new Date(Date.now() + 8 * 60 * 60 * 1000))
  */
 function getCovidDataByDate(date) {
   const sql = `SELECT DISTINCT "provinceName", "updateTime", "province_confirmedCount", "province_suspectedCount","province_curedCount","province_deadCount" FROM "DXYArea" WHERE "countryName" = '中国' AND "updateTime" LIKE '${date}%'`;
-  return db(sql);
+  return db(sql).then(data => data.rows);
 }
 
-getCovidDataByDate('2020-05-22')
-  .then(d=>console.log(d.rows));
+module.exports = {
+  getCovidDataByDate
+}

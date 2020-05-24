@@ -2,17 +2,34 @@ import React, { useState, useEffect } from 'react';
 import echarts from 'echarts';
 import '../../assets/js/myChina';
 import './map.css';
+import { getCovidDataByDate } from '../../api';
 
 export default function Map(props) {
 
   const [mapData, setMapData] = useState([]);
-  useEffect(data=>initMap(mapData), [mapData]);
-  setTimeout(() => {
-    setMapData([{ name: '广东', value: 233, test: 9998 }])
-  }, 2000);
+  useEffect(data => initMap(mapData), [mapData]);
+  useEffect(() => {
+    getCovidDataByDate()
+      .then(data => {
+        setMapData(formatData(data.data));
+
+        console.log(formatData(data.data))
+      })
+  }, []);
+  // setTimeout(() => {
+  //   setMapData([{ name: '内蒙', value: 233, test: 9998 }])
+  // }, 2000);
   return (
     <div id="map-div"></div>
   )
+}
+
+function formatData(data) {
+  for (let i = 0; i < data.length; i++) {
+    data[i].name = data[i].provinceName;
+    data[i].value = data[i].province_confirmedCount - data[i].province_curedCount - data[i].province_deadCount;
+  }
+  return data;
 }
 
 /**
@@ -39,8 +56,14 @@ function initMap(data) {
     // < !--backgroundColor: 'lightblue',//Echarts图背景颜色 -->
     tooltip: {//地图悬浮框显示内容
       formatter: function (params, ticket, callback) {
-        console.log(params)
-        return params.seriesName + '<br />' + params.name + '：' + params.value
+        try {
+          // console.log(params);
+          const { province_deadCount, province_confirmedCount, province_curedCount, updateTime } = params.data;
+          return `${params.name}<br />现存病例：${params.value}<br />累计确诊：${province_confirmedCount}<br />累计治愈：${province_curedCount}<br />累计死亡：${province_deadCount}<br />更新时间：${updateTime}`
+        } catch (error) {
+          return `${params.name}<br />已清零或无数据`
+        }
+
       },
     },
     visualMap: {
@@ -49,46 +72,46 @@ function initMap(data) {
       align: "left",//
       pieces: [ //将不同值的地图区域赋予颜色
         {
-          min: 10,
+          min: 1,
           max: 20,//以值的范围选择，也可用特定值来筛选，此时用value:表示 
-          label: '35.13%',//图例的标签名称
-          color: '#007979'//选中区域的颜色
+          label: '1-20',//图例的标签名称
+          color: '#FFDDDD'//选中区域的颜色
         },
         {
-          min: 20,
-          max: 30,
+          min: 21,
+          max: 100,
           label: '31.39%',
-          color: '#00AEAE'
+          color: '#FFAAAA'
         },
         {
-          min: 30,
-          max: 40,
+          min: 101,
+          max: 300,
           label: '12.41%',
-          color: '#00CACA'
+          color: '#FF9999'
         },
         {
-          min: 40,
-          max: 50,
+          min: 301,
+          max: 1000,
           label: '9.70%',
-          color: '#00E3E3'
+          color: '#DD8888'
         },
         {
-          min: 50,
-          max: 60,
+          min: 1000,
+          max: 3000,
           label: '9.42%',
-          color: '#00FFFF'
+          color: '#AA5555'
         },
         {
-          min: 60,
-          max: 1000000,
+          min: 3001,
+          max: 10000000,
           label: '1.95%',
-          color: '#80FFFF'
+          color: '#990000'
         }],
       left: '89%',
       top: '370px',
-      text: ['图例', '图例名1'],//地图图例名称
+      text: ['图例', '图例名1', '图例名2', '图例名3', '图例名4', '图例名5'],//地图图例名称
       textStyle: {//图例字号大小及颜色
-        color: '#000',
+        color: '#666666',
         fontSize: 12
       },
     },
