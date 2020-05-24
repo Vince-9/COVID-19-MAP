@@ -25,4 +25,18 @@ router.get('/api/v1/getLineChartData', async (req, res) => {
   }
 })
 
+router.post(`/api/v1/login`, async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    console.log(req.body);
+    if (username === 'admin' && password === '123456') {
+      res.send({ code: 0, data: { status: 0, msg: '登录成功' } });
+    } else {
+      res.send({ code: 0, data: { status: 1, msg: '登录失败' } });
+    }
+  } catch (error) {
+    res.status(500).end({ code: 1, msg: '服务器错误，请稍后再试' });
+  }
+})
+
 module.exports = router;

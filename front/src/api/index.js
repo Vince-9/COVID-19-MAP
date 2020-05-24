@@ -7,3 +7,7 @@ export function getCovidDataByDate(date) {
 export function getLineChartData() {
   return axios.get(`/api/v1/getLineChartData`).then(data => data.data);
 }
+
+export function reqLogin(username, password) {
+  return axios.post(`/api/v1/login`, { username, password }).then(data => data.data);
+}

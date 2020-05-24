@@ -6,6 +6,7 @@ import locale from 'antd/es/date-picker/locale/zh_CN';
 import HomeHeader from './home-header';
 import './home.css';
 import LineChart from '../line-chart/line-chart';
+import Login from '../login/login';
 
 
 
@@ -23,20 +24,38 @@ export default function Home() {
 	}
 
 	return (
+
 		<div>
-			<HomeHeader />
-			<div className="datepicker-container">
-				<span>按日期选择：</span>
-				<DatePicker
-					defaultValue={moment('2020-02-24', 'YYYY-MM-DD')}
-					format={'YYYY-MM-DD'}
-					onChange={onChange}
-					locale={locale}
-					disabledDate={disabledDate}
-				/>
-			</div>
-			<Map date={date} />
-			<LineChart />
+			{
+				isLogin() ?
+					(<>
+						<HomeHeader />
+						<div className="datepicker-container">
+							<span>按日期选择：</span>
+							<DatePicker
+								defaultValue={moment('2020-02-24', 'YYYY-MM-DD')}
+								format={'YYYY-MM-DD'}
+								onChange={onChange}
+								locale={locale}
+								disabledDate={disabledDate}
+							/>
+						</div>
+						<Map date={date} />
+						<LineChart />
+					</>
+					) :
+					(<Login />)
+			}
 		</div>
+
+
 	)
+}
+
+function isLogin() {
+	if (window.sessionStorage.getItem('user')) {
+		return true;
+	} else {
+		return false;
+	}
 }
