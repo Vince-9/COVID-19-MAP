@@ -24,3 +24,22 @@ exports.formateCovidData = function (data) {
     console.log(error);
   }
 }
+
+/**
+ * 格式化折线图数据
+ */
+exports.formatLineData = function (data) {
+  try {
+    data[0].updateTime = data[0].updateTime.substr(0, 10);
+    for (let i = 0; i < data.length - 1; i++) {
+      data[i + 1].updateTime = data[i + 1].updateTime.substr(0, 10);
+      if (data[i].updateTime === data[i + 1].updateTime) {
+        data.splice(i + 1, 1);
+        i--;
+      }
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}

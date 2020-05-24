@@ -1,0 +1,27 @@
+.home-header {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  background: royalblue;
+  box-shadow: 0 3px 7px rgb(15, 48, 117);
+}
+
+.home-header h1{
+  font-size: 24px;
+  color: white;
+  margin-left: 30px;
+}
+
+.home-header h2{
+  font-size: 20px;
+  color: white;
+  margin-left: 30px;
+}
+
+.datepicker-container {
+  width: 100%;
+  height: 40px;
+  margin-top: 20px;
+}

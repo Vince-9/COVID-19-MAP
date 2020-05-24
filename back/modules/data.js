@@ -18,6 +18,15 @@ function getCovidDataByDate(date) {
   return db(sql).then(data => data.rows);
 }
 
+/**
+ * 获取折线图数据
+ */
+function getLineChartData() {
+  const sql = `SELECT "provinceName","updateTime","province_confirmedCount","province_curedCount","province_deadCount" FROM "DXYArea" WHERE "provinceName" = '中国'`;
+  return db(sql).then(data => data.rows);
+}
+
 module.exports = {
-  getCovidDataByDate
+  getCovidDataByDate,
+  getLineChartData
 }

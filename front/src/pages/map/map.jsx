@@ -6,19 +6,21 @@ import { getCovidDataByDate } from '../../api';
 
 export default function Map(props) {
 
+  const { date } = props;
+
   const [mapData, setMapData] = useState([]);
-  useEffect(data => initMap(mapData), [mapData]);
+  useEffect(data => {
+    initMap(mapData, date);
+  }, [mapData]);
+
   useEffect(() => {
-    getCovidDataByDate()
+    getCovidDataByDate(date)
       .then(data => {
         setMapData(formatData(data.data));
-
-        console.log(formatData(data.data))
+        // console.log(formatData(data.data))
       })
-  }, []);
-  // setTimeout(() => {
-  //   setMapData([{ name: '内蒙', value: 233, test: 9998 }])
-  // }, 2000);
+  }, [date]);
+
   return (
     <div id="map-div"></div>
   )
@@ -36,17 +38,18 @@ function formatData(data) {
  * @description 初始化地图
  * @param {Array} data 地图数据
  */
-function initMap(data) {
+function initMap(data, date) {
   if (!data) {
     data = [
       { name: '福建', value: 20, test: 9998 },
       { name: '安徽', value: 5050, },
     ]
   }
-  var myChart = echarts.init(document.getElementById('map-div'));
-  var option = {
+  date = date.split('-');
+  const myChart = echarts.init(document.getElementById('map-div'));
+  const option = {
     title: {//设置地图标题
-      text: '疫情地图',//地图图名
+      text: `疫情地图·${date[0]}年${date[1]}月${date[2]}日`,//地图图名
       left: 'center',//地图在横向上的位置
       top: '20',//地图距其DIV上边界的距离
       textStyle: {//图名字号大小
